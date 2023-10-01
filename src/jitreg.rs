@@ -1,6 +1,6 @@
 use std::arch::asm;
 use std::os::raw::c_void;
-use std::ptr;
+use std::{process, ptr};
 
 use tracing::{error, info};
 
@@ -33,6 +33,9 @@ pub static mut __jit_debug_descriptor: JitDescriptor = JitDescriptor {
 };
 
 pub fn register_jit_code(code_ptr: *const c_void, code_size: u64) {
+    if std::env::var("SKIP_JIT").is_ok() {
+        return;
+    }
     let entry = Box::into_raw(Box::new(JitCodeEntry {
         next: ptr::null_mut(),
         prev: ptr::null_mut(),
@@ -60,7 +63,9 @@ pub fn register_jit_code(code_ptr: *const c_void, code_size: u64) {
         __jit_debug_descriptor.relevant_entry = entry;
         __jit_debug_descriptor.action_flag = 1;
 
-        // Inform LLDB
+        asm!("nop");
+
+        // Inform debugger
         __jit_debug_register_code();
     }
     info!("debugger informed");

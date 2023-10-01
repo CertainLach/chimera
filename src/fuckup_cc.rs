@@ -93,7 +93,7 @@ impl_args_like! {
 /// Receives normal function, returns win64 abi function
 /// Does not support float arguments
 /// Assuming x86_64 system with sysv as primary conversion
-pub fn fuckup_cc<F: SysvFunction>(target: F) -> usize {
+pub fn fuckup_cc<F: SysvFunction>(name: &str, target: F) -> usize {
     // More than argc is needed for floats
     let argc = F::argc();
 
@@ -172,5 +172,7 @@ pub fn fuckup_cc<F: SysvFunction>(target: F) -> usize {
     module.finalize_definitions().unwrap();
     // register_jit_code(module.get_finalized_function(func_id), code_size)
 
-    module.get_finalized_function(tramp_fn) as usize
+    let v = module.get_finalized_function(tramp_fn) as usize;
+    eprintln!("JIT ccfuck {name} at {v:x?}");
+    v
 }
