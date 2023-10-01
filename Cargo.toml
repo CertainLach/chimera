@@ -1,0 +1,24 @@
+[package]
+name = "dllloader"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.75"
+backtrace = "0.3.69"
+cranelift = "0.100.0"
+cranelift-codegen = "0.100.0"
+cranelift-jit = "0.100.0"
+cranelift-module = "0.100.0"
+cranelift-native = "0.100.0"
+dynasm = "2.0.0"
+dynasmrt = "2.0.0"
+libc = "0.2.148"
+memmap2 = "0.8.0"
+pelite = {path = "./pelite"}
+region = "3.0.0"
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+wasmtime-jit-debug = { version = "13.0.0", features = ["gdb_jit_int"] }
